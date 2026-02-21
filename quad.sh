@@ -11,9 +11,13 @@ SESSION="quad"
 
 # Kill existing session if it exists
 tmux kill-session -t $SESSION 2>/dev/null
+sleep 0.5  # give tmux a moment to clean up
 
-# Create a new tmux session (detached)
+# Create new session
 tmux new-session -d -s $SESSION
+
+# Select top-left to start
+tmux select-pane -t %0
 
 # Split into 4 even panes:
 # ┌─────────┬─────────┐
@@ -21,16 +25,24 @@ tmux new-session -d -s $SESSION
 # ├─────────┼─────────┤
 # │  0.2    │  0.3    │
 # └─────────┴─────────┘
-tmux split-window -h -t $SESSION        # Split right  → Panes 0.0 | 0.1
-tmux split-window -v -t $SESSION:0.0    # Split bottom → Panes 0.0 / 0.2
-tmux split-window -v -t $SESSION:0.2    # Split bottom → Panes 0.1 / 0.3
+
+# Split into 4 panes
+tmux split-window -h     # → 0.0 | 0.1
+tmux select-pane -t %0   # 0.0
+tmux split-window -v     # → 0.0 / 0.2
+tmux select-pane -t %1   # 0.1
+tmux split-window -v     # → 0.1 / 0.3
+tmux select-pane -t %0   # 0.0
 
 # Preload commands in each pane (customize as needed)
-# tmux send-keys -t $SESSION:0.0 "echo 'top-left'"     Enter
-tmux send-keys -t $SESSION:0.1 "htop" Enter
+#tmux send-keys -t %0 "echo 'Pane 1 - top left'"  Enter   # top-left
+#tmux send-keys -t %2 "echo 'Pane 3 - bottom left'" Enter  # bottom-left
+#tmux send-keys -t %1 "echo 'Pane 2 - top right'"  Enter   # top-right
+tmux send-keys -t %1 "htop"  Enter   # top-right
+#tmux send-keys -t %3 "echo 'Pane 4 - bottom right'" Enter # bottom-right
 
 # Select top-left pane to start
-tmux select-pane -t $SESSION:0.0
+tmux select-pane -t %0
 
 # Launch GNOME Terminal maximized, attaching to the tmux session
 gnome-terminal --maximize -- tmux attach-session -t $SESSION
