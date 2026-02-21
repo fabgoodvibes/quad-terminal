@@ -92,7 +92,7 @@ if [ -f "$HOME/.tmux.conf" ]; then
     cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.bak"
     print_warn "Existing ~/.tmux.conf backed up to ~/.tmux.conf.bak"
 fi
-cp "$REPO_DIR/.tmux.conf" "$HOME/.tmux.conf"
+cp "$REPO_DIR/tmux.conf" "$HOME/.tmux.conf"
 print_ok "Installed ~/.tmux.conf"
 echo -e "     ${DIM}-> Ctrl+Arrow keys to switch panes (no prefix needed)${RESET}"
 
